@@ -4,7 +4,7 @@ Aplikasi kiosk photobooth: kamera langsung → pilih template → pilih filter �
 
 ## Alur
 1. **Sambutan** – "SENTUH UNTUK (MULAI)" (bisa juga tombol fisik: Enter/Spasi = tombol utama).
-2. **Pilih Template** – Heritage Kota, Wisata Majapahit, Pesantren, Wisuda Sekolah, Photo Strip Klasik.
+2. **Pilih Template** – Heritage Bajang Ratu, Wisata Majapahit, Pesantren, Wisuda Sekolah, Photo Strip Klasik.
 3. **Pilih Filter** – Normal, Hitam Putih, Sepia, Vintage, Hangat, Sejuk, Drama, Pudar (pratinjau langsung di tiap tombol).
 4. **Sesi Foto** – hitung mundur 3-2-1, flash, jumlah foto sesuai template. Selama sesi direkam **video langsung** (sudah berfilter).
 5. **Pratinjau** – Ulangi Foto / Cetak & Simpan (otomatis lanjut 30 dtk).

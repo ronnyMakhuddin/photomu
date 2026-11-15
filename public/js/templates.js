@@ -22,18 +22,18 @@ export const FILTERS = [
 export const TEMPLATES = [
   {
     id: 'heritage',
-    name: 'Heritage Kota',
-    desc: 'Gaya koran klasik, 1 foto utama + 3 foto kecil',
+    name: 'Heritage Bajang Ratu',
+    desc: 'Koran klasik Candi Bajang Ratu, 1 foto utama + 3 foto kecil',
     layout: 'newspaper',
     slots: 4,
     defaultFilter: 'normal',
     palette: { paper: '#F2F1EC', ink: '#1E1E1E', accent: '#7A1F1F', muted: '#55524A' },
     edition: 'Edisi Spesial Heritage',
-    headline: ['JEJAK SEJARAH', 'YANG SELALU DIRINDUKAN'],
-    bullets: ['Kayu Tangan Heritage', 'Kawasan Cagar Budaya Jalan Basuki Rahmat'],
+    headline: ['JEJAK SEJARAH', 'DI GERBANG BAJANG RATU'],
+    bullets: ['Candi Bajang Ratu', 'Situs Trowulan, Kabupaten Mojokerto'],
     body: [
-      'Menyusuri setiap sudut Kayutangan membawa kita merasakan kembali romantisme Mojokerto tempo dulu. Dari deretan bangunan berarsitektur kolonial yang masih asli hingga keramahan warga di dalam gang kampung heritage, setiap langkah di sini menyimpan cerita yang tak terlupakan.',
-      'Bukan sekadar tempat berfoto, kawasan ini adalah ruang untuk bernostalgia dan merayakan sejarah kota. Selamat menikmati kehangatan udara sore, aroma kopi lokal yang khas, dan kenangan manis yang tercipta di jantung Kota Mojokerto.',
+      'Berdiri anggun di tanah Trowulan, Candi Bajang Ratu adalah gapura paduraksa peninggalan Majapahit dari abad ke-14. Susunan bata merahnya yang menjulang ramping dihiasi relief kala dan cerita Sri Tanjung, menyimpan kisah kejayaan kerajaan besar Nusantara.',
+      'Bukan sekadar tempat berfoto, gerbang bersejarah ini adalah ruang untuk mengenal dan merayakan warisan leluhur. Selamat menikmati teduhnya taman candi dan kenangan manis yang tercipta di jantung sejarah Mojokerto.',
     ],
     sideTitle: 'Kabar Hari Ini',
     sideText: 'Satu bingkai, seribu cerita. Terima kasih telah mengabadikan momen bersama kami. Simpan, bagikan, dan kembalilah lagi untuk menulis halaman berikutnya.',
@@ -71,7 +71,7 @@ export const TEMPLATES = [
     palette: { bg1: '#0E4D35', bg2: '#08311F', gold: '#D4AF37', cream: '#F7F1DE' },
     arabic: 'بَارَكَ اللهُ فِيْكُمْ',
     title: 'Kenangan Santri',
-    subtitle: 'PONDOK PESANTREN AL-HIKMAH',
+    subtitle: "PONDOK PESANTREN MAMBA'UL ULUM",
     footerText: 'Tholabul ‘ilmi faridhotun ‘ala kulli muslim',
   },
   {
