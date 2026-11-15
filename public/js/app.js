@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { TEMPLATES, FILTERS, renderTemplate, placeholderPhotos, loadFonts, preloadOverlays, drawCover, formatDateID } from './templates.js';
+import { TEMPLATES, FILTERS, renderTemplate, placeholderPhotos, loadFonts, preloadOverlays, preloadLogos, drawCover, formatDateID } from './templates.js';
 import { GIFEncoder, quantize, applyPalette } from '../vendor/gifenc.esm.js';
 import { apiAvailable, saveCloud, saveLocal } from './storage.js';
 
@@ -49,6 +49,7 @@ function marquee(el) {
   el.textContent = t.repeat(6);
 }
 $('#w-location').textContent = CONFIG.location;
+$('#w-logos').innerHTML = (CONFIG.logos || []).map(src => `<img src="${src}" alt="">`).join('');
 marquee($('#w-marquee')); marquee($('#r-marquee'));
 $('#btn-start').addEventListener('click', () => { go('s-template'); ensureCamera(); });
 
@@ -318,7 +319,7 @@ $('#btn-restart').addEventListener('click', restart);
 // --------------------------------------------------------------------
 (async function init() {
   await loadFonts();
-  await preloadOverlays();
+  await Promise.all([preloadOverlays(), preloadLogos(CONFIG.logos)]);
   buildTemplateGrid();
   buildFilterRow();
   selectFilter(FILTERS.find(f => f.id === state.tpl.defaultFilter) || FILTERS[0]);

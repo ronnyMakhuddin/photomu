@@ -46,7 +46,7 @@ chrome.exe --kiosk --kiosk-printing --autoplay-policy=no-user-gesture-required h
 `npm run demo` (atau server statis apa pun di folder `public/`) → aplikasi jalan penuh, hasil disimpan di IndexedDB browser dan QR mengarah ke `hasil.html?local=1` (hanya bisa dibuka di perangkat yang sama). Cocok untuk mencoba tampilan sebelum deploy.
 
 ## Kustomisasi
-- **Nama booth, lokasi, hitung mundur, auto-print, cermin**: `public/js/config.js`.
+- **Nama booth, lokasi, logo, hitung mundur, auto-print, cermin**: `public/js/config.js` (logo ada di `public/img/`, urutan `[kiri, kanan]`).
 - **Teks/warna template** (judul koran, nama pondok, nama sekolah, dll.): `public/js/templates.js` → array `TEMPLATES`.
 - **Template baru**: salin objek yang ada (layout `newspaper`, `arch`, `hero`, `strip`), atau pakai layout `overlay` dengan bingkai PNG 1200×1800 milik sendiri (taruh di `public/frames/`, tentukan kotak foto `rects`). Contoh ada di komentar `templates.js`.
 - **Filter baru**: tambah di `FILTERS` (string CSS filter, mis. `'grayscale(1) contrast(1.3)'`).

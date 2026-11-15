@@ -111,6 +111,20 @@ const FONT_SPECS = [
   '700 20px "Playfair Display"', '900 20px "Playfair Display"', 'italic 700 20px "Playfair Display"',
   '300 20px "Jost"', '400 20px "Jost"', '600 20px "Jost"', '400 20px "Amiri"', '700 20px "Amiri"',
 ];
+// Logo (diisi dari CONFIG.logos lewat preloadLogos). Urutan: [kiri, kanan]
+export const LOGOS = [];
+export function preloadLogos(srcs = []) {
+  return Promise.all(srcs.map((src, i) => new Promise(res => {
+    const img = new Image(); img.onload = () => { LOGOS[i] = img; res(); }; img.onerror = res; img.src = src;
+  })));
+}
+function drawLogo(ctx, img, cx, cy, h) {
+  if (!img || !img.naturalWidth) return;
+  const w = h * img.naturalWidth / img.naturalHeight;
+  ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
+}
+function logoPair(ctx, xl, xr, cy, h) { drawLogo(ctx, LOGOS[0], xl, cy, h); drawLogo(ctx, LOGOS[1], xr, cy, h); }
+
 export async function loadFonts() {
   try { await Promise.all(FONT_SPECS.map(f => document.fonts.load(f, 'Aaبَ'))); } catch (e) { /* lanjut dengan font cadangan */ }
 }
@@ -216,8 +230,9 @@ function renderNewspaper(ctx, t, photos, opt) {
 
   // judul utama
   ctx.textAlign = 'center';
-  ctx.font = '700 58px "Playfair Display", Georgia, serif';
+  ctx.font = `700 ${LOGOS.length ? 52 : 58}px "Playfair Display", Georgia, serif`;
   t.headline.forEach((h, i) => spaced(ctx, h, W / 2, y + 82 + i * 70, 3));
+  logoPair(ctx, M + 58, W - M - 58, y + 40 + (t.headline.length - 1) * 35 + 22, 118);
   y += 82 + (t.headline.length - 1) * 70 + 40;
 
   // baris poin
@@ -345,6 +360,7 @@ function renderArch(ctx, t, photos, opt) {
 
   ctx.textAlign = 'center'; ctx.fillStyle = p.gold;
   ctx.font = '700 62px "Amiri", serif'; ctx.fillText(t.arabic, W / 2, 150);
+  logoPair(ctx, 175, W - 175, 195, 170);
   ctx.fillStyle = p.cream; ctx.font = 'italic 700 72px "Playfair Display", Georgia, serif';
   ctx.fillText(t.title, W / 2, 245);
   ctx.fillStyle = p.gold; ctx.font = '600 24px "Jost", sans-serif';
@@ -397,7 +413,8 @@ function renderHero(ctx, t, photos, opt) {
   spaced(ctx, t.kicker, W / 2, 110, 10);
   ctx.fillStyle = p.cream; ctx.font = '900 150px "Playfair Display", Georgia, serif';
   ctx.fillText(t.title, W / 2, 255);
-  capIcon(ctx, 150, 190, 54, p.gold); capIcon(ctx, W - 150, 190, 54, p.gold);
+  if (LOGOS.length) logoPair(ctx, 150, W - 150, 200, 160);
+  else { capIcon(ctx, 150, 190, 54, p.gold); capIcon(ctx, W - 150, 190, 54, p.gold); }
   ctx.fillStyle = p.gold; ctx.font = '400 30px "Jost", sans-serif'; spaced(ctx, t.year, W / 2, 310, 12);
 
   const bx = 80, by = 350, bw = W - 160, bh = 820;
@@ -430,6 +447,7 @@ function renderStrip(ctx, t, photos, opt) {
     ctx.fillStyle = p.ink; ctx.font = '400 24px "Jost", sans-serif';
     spaced(ctx, opt.date.toUpperCase(), ox + 300, ty + 150, 4);
     ctx.font = '300 20px "Jost", sans-serif'; spaced(ctx, opt.location.toUpperCase(), ox + 300, ty + 190, 4);
+    logoPair(ctx, ox + 255, ox + 345, ty + 250, 72);
   }
   ctx.save(); ctx.strokeStyle = '#bbb'; ctx.setLineDash([14, 10]); ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(600, 0); ctx.lineTo(600, H); ctx.stroke(); ctx.restore();
