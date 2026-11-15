@@ -1,8 +1,8 @@
 // Pengaturan kiosk. Ubah sesuai lokasi/acara.
 export const CONFIG = {
-  eventName: 'Photobox Kaca Cembung',      // nama booth / acara
-  location: 'Malang, Indonesia',
-  tagline: 'Photobox Kaca Cembung #1 di Kayu Tangan',
+  eventName: "Photobox SMK Mamba'ul Ulum",      // nama booth / acara
+  location: 'Mojokerto, Indonesia',
+  tagline: "Photobox SMK Mamba'ul Ulum Mojokerto",
   countdownSec: 3,          // hitung mundur per foto
   pauseBetweenShotsMs: 1200,
   mirror: true,             // tampilan & hasil dicerminkan seperti cermin

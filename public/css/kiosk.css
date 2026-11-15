@@ -29,7 +29,7 @@ button { font-family: var(--sans); cursor: pointer; border: 0; background: none;
     linear-gradient(var(--line), var(--line)) 30% 6% / 70% 1px no-repeat,
     linear-gradient(var(--line), var(--line)) 0 88% / 100% 1px no-repeat; opacity: .75; }
 
-.mega { position: relative; font-weight: 300; font-size: clamp(56px, 11vw, 150px); line-height: .98; letter-spacing: -.01em; margin-top: 4vh; }
+.mega { position: relative; font-weight: 300; font-size: clamp(56px, min(11vw, 15vh), 150px); line-height: .98; letter-spacing: -.01em; margin-top: 4vh; }
 .mega.small { font-size: clamp(40px, min(6.5vw, 9vh), 96px); margin-top: 0; }
 .welcome-top { position: relative; display: flex; align-items: center; gap: 18px; }
 .ring { margin-right: 30px; flex: 0 0 auto; width: 64px; height: 34px; border: 2px solid var(--line); border-radius: 50%; box-shadow: 26px 0 0 -2px var(--paper), 26px 0 0 0 var(--line); }

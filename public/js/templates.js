@@ -32,8 +32,8 @@ export const TEMPLATES = [
     headline: ['JEJAK SEJARAH', 'YANG SELALU DIRINDUKAN'],
     bullets: ['Kayu Tangan Heritage', 'Kawasan Cagar Budaya Jalan Basuki Rahmat'],
     body: [
-      'Menyusuri setiap sudut Kayutangan membawa kita merasakan kembali romantisme Malang tempo dulu. Dari deretan bangunan berarsitektur kolonial yang masih asli hingga keramahan warga di dalam gang kampung heritage, setiap langkah di sini menyimpan cerita yang tak terlupakan.',
-      'Bukan sekadar tempat berfoto, kawasan ini adalah ruang untuk bernostalgia dan merayakan sejarah kota. Selamat menikmati kehangatan udara sore, aroma kopi lokal yang khas, dan kenangan manis yang tercipta di jantung Kota Malang.',
+      'Menyusuri setiap sudut Kayutangan membawa kita merasakan kembali romantisme Mojokerto tempo dulu. Dari deretan bangunan berarsitektur kolonial yang masih asli hingga keramahan warga di dalam gang kampung heritage, setiap langkah di sini menyimpan cerita yang tak terlupakan.',
+      'Bukan sekadar tempat berfoto, kawasan ini adalah ruang untuk bernostalgia dan merayakan sejarah kota. Selamat menikmati kehangatan udara sore, aroma kopi lokal yang khas, dan kenangan manis yang tercipta di jantung Kota Mojokerto.',
     ],
     sideTitle: 'Kabar Hari Ini',
     sideText: 'Satu bingkai, seribu cerita. Terima kasih telah mengabadikan momen bersama kami. Simpan, bagikan, dan kembalilah lagi untuk menulis halaman berikutnya.',
@@ -85,7 +85,7 @@ export const TEMPLATES = [
     kicker: 'SELAMAT & SUKSES',
     title: 'WISUDA',
     year: 'ANGKATAN 2026',
-    school: 'SMA NEGERI 1 KOTA MALANG',
+    school: "SMK MAMBA'UL ULUM MOJOKERTO",
   },
   {
     id: 'strip',
@@ -288,8 +288,8 @@ function drawStamp(ctx, cx, cy, r, color, opt) { // cap pos melingkar
   ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.globalAlpha = 0.85;
   ctx.lineWidth = 4; ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
   ctx.lineWidth = 2; ctx.beginPath(); ctx.arc(cx, cy, r - 30, 0, Math.PI * 2); ctx.stroke();
-  const text = (' • ' + opt.location.toUpperCase() + ' • ' + opt.eventName.toUpperCase()).slice(0, 46);
-  ctx.font = '600 18px "Jost", sans-serif'; ctx.textAlign = 'center';
+  const text = ' \u2022 ' + opt.location.split(',')[0].toUpperCase() + ' \u2022 ' + opt.eventName.toUpperCase();
+  ctx.font = `600 ${text.length > 46 ? 15 : 18}px "Jost", sans-serif`; ctx.textAlign = 'center';
   const step = (Math.PI * 2) / Math.max(text.length, 30);
   [...text].forEach((ch, i) => {
     ctx.save(); ctx.translate(cx, cy); ctx.rotate(-Math.PI / 2 + i * step + step / 2);

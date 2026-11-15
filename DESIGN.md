@@ -23,7 +23,7 @@
 
 ## 4. Struktur Layout & Navigasi
 - Kiosk layar penuh, tanpa navbar; navigasi linear per langkah (01/03 → 03/03) dengan bilah aksi bawah: tombol outline "← KEMBALI" kiri, tombol navy "LANJUT →" kanan.
-- Layar hasil: kiri = pratinjau cetak + tab LIVE/FOTO/GIF; kanan = "Pindai Kode QR", kotak QR putih, catatan cetak, tombol MULAI LAGI. Bawah = marquee "PHOTOBOX KACA CEMBUNG #1 DI KAYU TANGAN".
+- Layar hasil: kiri = pratinjau cetak + tab LIVE/FOTO/GIF; kanan = "Pindai Kode QR", kotak QR putih, catatan cetak, tombol MULAI LAGI. Bawah = marquee tagline booth (mis. "PHOTOBOX SMK MAMBA'UL ULUM MOJOKERTO").
 - Padding kontainer `clamp(16px, 3vw, 48px)`, gap 14–28px. Mendukung monitor potret (kiosk vertikal) & lanskap.
 
 ## 5. Bedah Komponen
