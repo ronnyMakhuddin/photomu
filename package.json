@@ -1,0 +1,16 @@
+{
+  "name": "photobooth-self-service",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Aplikasi photobooth self-service: kiosk kamera, template, filter, GIF, video langsung, QR hasil. Vercel + Neon + Vercel Blob.",
+  "scripts": {
+    "dev": "vercel dev",
+    "demo": "npx --yes serve public -l 3000"
+  },
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "@vercel/blob": "^2.0.0"
+  }
+}

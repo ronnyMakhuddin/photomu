@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>Photobooth Kiosk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Jost:wght@200;300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/kiosk.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- 1. LAYAR SAMBUTAN -->
+  <section class="screen active" id="s-welcome">
+    <div class="grid-lines"></div>
+    <div class="welcome-top">
+      <div class="ring"></div>
+      <span class="micro" id="w-location"></span>
+    </div>
+    <h1 class="mega">SENTUH<br>UNTUK<br>(MULAI)</h1>
+    <div class="welcome-row">
+      <span class="label">FOTO &bull; GIF &bull; VIDEO LANGSUNG</span>
+      <span class="label right">PILIH TEMPLATE &amp; FILTER</span>
+    </div>
+    <button class="btn-navy big" id="btn-start">MULAI FOTO <span class="arrow">&rarr;</span></button>
+    <div class="marquee"><div class="marquee-track" id="w-marquee"></div></div>
+  </section>
+
+  <!-- 2. PILIH TEMPLATE -->
+  <section class="screen" id="s-template">
+    <header class="bar">
+      <span class="step">01 / 03</span>
+      <h2>PILIH TEMPLATE</h2>
+      <span class="step muted">Sentuh salah satu</span>
+    </header>
+    <div class="tpl-grid" id="tpl-grid"></div>
+    <footer class="actions">
+      <button class="btn-ghost" data-go="s-welcome">&larr; KEMBALI</button>
+      <button class="btn-navy" id="btn-to-filter">LANJUT <span class="arrow">&rarr;</span></button>
+    </footer>
+  </section>
+
+  <!-- 3. PILIH FILTER -->
+  <section class="screen" id="s-filter">
+    <header class="bar">
+      <span class="step">02 / 03</span>
+      <h2>PILIH FILTER</h2>
+      <span class="step muted" id="f-tplname"></span>
+    </header>
+    <div class="cam-wrap"><video id="cam-filter" class="cam" autoplay playsinline muted></video><div class="cam-error" id="cam-error" hidden></div></div>
+    <div class="filter-row" id="filter-row"></div>
+    <footer class="actions">
+      <button class="btn-ghost" data-go="s-template">&larr; TEMPLATE</button>
+      <button class="btn-navy" id="btn-shoot">MULAI FOTO <span class="arrow">&rarr;</span></button>
+    </footer>
+  </section>
+
+  <!-- 4. SESI FOTO -->
+  <section class="screen" id="s-shoot">
+    <header class="bar">
+      <span class="step">03 / 03</span>
+      <h2 id="shot-label">FOTO 1 DARI 4</h2>
+      <span class="rec"><i></i> VIDEO LANGSUNG</span>
+    </header>
+    <div class="cam-wrap"><video id="cam-shoot" class="cam" autoplay playsinline muted></video>
+      <div class="countdown" id="countdown"></div>
+      <div class="flash" id="flash"></div>
+    </div>
+    <div class="thumbs" id="thumbs"></div>
+  </section>
+
+  <!-- 5. TINJAU -->
+  <section class="screen" id="s-review">
+    <header class="bar">
+      <span class="step">PRATINJAU</span>
+      <h2>SUKA HASILNYA?</h2>
+      <span class="step muted" id="review-timer"></span>
+    </header>
+    <div class="review-body">
+      <img id="review-img" class="paper" alt="Pratinjau hasil">
+    </div>
+    <footer class="actions">
+      <button class="btn-ghost" id="btn-retake">&#8634; ULANGI FOTO</button>
+      <button class="btn-navy" id="btn-finish">CETAK &amp; SIMPAN <span class="arrow">&rarr;</span></button>
+    </footer>
+  </section>
+
+  <!-- 6. HASIL + QR -->
+  <section class="screen" id="s-result">
+    <div class="grid-lines"></div>
+    <div class="result-body">
+      <h1 class="mega small">PINDAI<br>KODE<br>(QR)</h1>
+      <div class="result-left">
+        <div class="media-box">
+          <img id="res-photo" class="paper" alt="Hasil foto">
+          <img id="res-gif" class="paper" alt="Hasil GIF" hidden>
+          <video id="res-video" class="paper" playsinline loop muted hidden></video>
+        </div>
+        <div class="tabs" id="res-tabs">
+          <button data-tab="video">LIVE</button>
+          <button data-tab="photo" class="on">FOTO</button>
+          <button data-tab="gif">GIF</button>
+        </div>
+      </div>
+      <div class="result-right">
+        <p class="qr-title">Pindai Kode QR</p>
+        <div class="qr-box" id="qr-box"><div class="spinner"></div></div>
+        <p class="qr-note" id="qr-note">Menyiapkan hasil&hellip;</p>
+        <p class="hint">Tunggu sebentar untuk hasil print</p>
+        <button class="btn-navy" id="btn-restart">MULAI LAGI <span class="arrow">&rarr;</span></button>
+        <p class="hint small" id="idle-note"></p>
+      </div>
+    </div>
+    <div class="marquee"><div class="marquee-track" id="r-marquee"></div></div>
+  </section>
+
+  <div class="overlay-busy" id="busy" hidden><div class="spinner light"></div><p id="busy-text">Memproses&hellip;</p></div>
+</div>
+
+<div id="print-area"><img id="print-img" alt=""></div>
+
+<script src="/vendor/qrcode.js"></script>
+<script type="module" src="/js/app.js"></script>
+</body>
+</html>
