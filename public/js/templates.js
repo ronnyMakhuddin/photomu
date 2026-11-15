@@ -72,6 +72,7 @@ export const TEMPLATES = [
     arabic: 'بَارَكَ اللهُ فِيْكُمْ',
     title: 'Kenangan Santri',
     subtitle: "PONDOK PESANTREN MAMBA'UL ULUM",
+    logo: '/img/logo-yayasan.png',
     footerText: 'Tholabul ‘ilmi faridhotun ‘ala kulli muslim',
   },
   {
@@ -86,6 +87,7 @@ export const TEMPLATES = [
     title: 'WISUDA',
     year: 'ANGKATAN 2026',
     school: "SMK MAMBA'UL ULUM MOJOKERTO",
+    logo: '/img/logo-smk.png',
   },
   {
     id: 'strip',
@@ -111,19 +113,19 @@ const FONT_SPECS = [
   '700 20px "Playfair Display"', '900 20px "Playfair Display"', 'italic 700 20px "Playfair Display"',
   '300 20px "Jost"', '400 20px "Jost"', '600 20px "Jost"', '400 20px "Amiri"', '700 20px "Amiri"',
 ];
-// Logo (diisi dari CONFIG.logos lewat preloadLogos). Urutan: [kiri, kanan]
-export const LOGOS = [];
-export function preloadLogos(srcs = []) {
-  return Promise.all(srcs.map((src, i) => new Promise(res => {
-    const img = new Image(); img.onload = () => { LOGOS[i] = img; res(); }; img.onerror = res; img.src = src;
+// Logo per template (properti `logo` di TEMPLATES), dimuat sekali lewat preloadLogos()
+const logoCache = {};
+export function preloadLogos() {
+  return Promise.all(TEMPLATES.filter(t => t.logo).map(t => new Promise(res => {
+    const img = new Image(); img.onload = () => { logoCache[t.logo] = img; res(); }; img.onerror = res; img.src = t.logo;
   })));
 }
+const logoOf = (t) => (t.logo && logoCache[t.logo]) || null;
 function drawLogo(ctx, img, cx, cy, h) {
   if (!img || !img.naturalWidth) return;
   const w = h * img.naturalWidth / img.naturalHeight;
   ctx.drawImage(img, cx - w / 2, cy - h / 2, w, h);
 }
-function logoPair(ctx, xl, xr, cy, h) { drawLogo(ctx, LOGOS[0], xl, cy, h); drawLogo(ctx, LOGOS[1], xr, cy, h); }
 
 export async function loadFonts() {
   try { await Promise.all(FONT_SPECS.map(f => document.fonts.load(f, 'Aaبَ'))); } catch (e) { /* lanjut dengan font cadangan */ }
@@ -230,9 +232,8 @@ function renderNewspaper(ctx, t, photos, opt) {
 
   // judul utama
   ctx.textAlign = 'center';
-  ctx.font = `700 ${LOGOS.length ? 52 : 58}px "Playfair Display", Georgia, serif`;
+  ctx.font = '700 58px "Playfair Display", Georgia, serif';
   t.headline.forEach((h, i) => spaced(ctx, h, W / 2, y + 82 + i * 70, 3));
-  logoPair(ctx, M + 58, W - M - 58, y + 40 + (t.headline.length - 1) * 35 + 22, 118);
   y += 82 + (t.headline.length - 1) * 70 + 40;
 
   // baris poin
@@ -358,15 +359,16 @@ function renderArch(ctx, t, photos, opt) {
   ctx.fillStyle = p.gold;
   [[30, 30], [W - 30, 30], [30, H - 30], [W - 30, H - 30]].forEach(([x, y]) => { star8(ctx, x, y, 26); ctx.fill(); });
 
+  const logo = logoOf(t), dy = logo ? 140 : 0;
+  if (logo) drawLogo(ctx, logo, W / 2, 142, 160);
   ctx.textAlign = 'center'; ctx.fillStyle = p.gold;
-  ctx.font = '700 62px "Amiri", serif'; ctx.fillText(t.arabic, W / 2, 150);
-  logoPair(ctx, 175, W - 175, 195, 170);
+  ctx.font = '700 62px "Amiri", serif'; ctx.fillText(t.arabic, W / 2, 150 + dy);
   ctx.fillStyle = p.cream; ctx.font = 'italic 700 72px "Playfair Display", Georgia, serif';
-  ctx.fillText(t.title, W / 2, 245);
+  ctx.fillText(t.title, W / 2, 245 + dy);
   ctx.fillStyle = p.gold; ctx.font = '600 24px "Jost", sans-serif';
-  spaced(ctx, t.subtitle, W / 2, 292, 6);
+  spaced(ctx, t.subtitle, W / 2, 292 + dy, 6);
 
-  const x0 = 96, y0 = 340, gap = 36, cw = (W - 2 * x0 - gap) / 2, ch = 590;
+  const x0 = 96, y0 = 340 + dy, gap = 36, cw = (W - 2 * x0 - gap) / 2, ch = (1556 - y0 - gap) / 2;
   for (let i = 0; i < 4; i++) {
     const x = x0 + (i % 2) * (cw + gap), y = y0 + Math.floor(i / 2) * (ch + gap);
     ctx.save(); archPath(ctx, x, y, cw, ch); ctx.clip();
@@ -409,15 +411,16 @@ function renderHero(ctx, t, photos, opt) {
   }
   ctx.restore();
 
+  const logo = logoOf(t), dy = logo ? 120 : 0;
+  if (logo) drawLogo(ctx, logo, W / 2, 112, 150);
   ctx.textAlign = 'center'; ctx.fillStyle = p.gold; ctx.font = '600 34px "Jost", sans-serif';
-  spaced(ctx, t.kicker, W / 2, 110, 10);
+  spaced(ctx, t.kicker, W / 2, 110 + dy, 10);
   ctx.fillStyle = p.cream; ctx.font = '900 150px "Playfair Display", Georgia, serif';
-  ctx.fillText(t.title, W / 2, 255);
-  if (LOGOS.length) logoPair(ctx, 150, W - 150, 200, 160);
-  else { capIcon(ctx, 150, 190, 54, p.gold); capIcon(ctx, W - 150, 190, 54, p.gold); }
-  ctx.fillStyle = p.gold; ctx.font = '400 30px "Jost", sans-serif'; spaced(ctx, t.year, W / 2, 310, 12);
+  ctx.fillText(t.title, W / 2, 255 + dy);
+  capIcon(ctx, 150, 190 + dy, 54, p.gold); capIcon(ctx, W - 150, 190 + dy, 54, p.gold);
+  ctx.fillStyle = p.gold; ctx.font = '400 30px "Jost", sans-serif'; spaced(ctx, t.year, W / 2, 310 + dy, 12);
 
-  const bx = 80, by = 350, bw = W - 160, bh = 820;
+  const bx = 80, by = 350 + dy, bw = W - 160, bh = 820 - dy;
   ctx.fillStyle = p.gold; ctx.fillRect(bx + 18, by + 18, bw, bh);
   photoBox(ctx, photos[0], bx, by, bw, bh, 10, p.cream);
   const sy = by + bh + 50, sw = (bw - 34) / 2, sh = 360;
@@ -447,7 +450,6 @@ function renderStrip(ctx, t, photos, opt) {
     ctx.fillStyle = p.ink; ctx.font = '400 24px "Jost", sans-serif';
     spaced(ctx, opt.date.toUpperCase(), ox + 300, ty + 150, 4);
     ctx.font = '300 20px "Jost", sans-serif'; spaced(ctx, opt.location.toUpperCase(), ox + 300, ty + 190, 4);
-    logoPair(ctx, ox + 255, ox + 345, ty + 250, 72);
   }
   ctx.save(); ctx.strokeStyle = '#bbb'; ctx.setLineDash([14, 10]); ctx.lineWidth = 2;
   ctx.beginPath(); ctx.moveTo(600, 0); ctx.lineTo(600, H); ctx.stroke(); ctx.restore();

@@ -155,6 +155,3 @@ button { font-family: var(--sans); cursor: pointer; border: 0; background: none;
   .result-body .mega { display: none; }
   .result-right { align-self: center; }
 }
-
-.logos { margin-left: auto; display: flex; gap: 18px; align-items: center; }
-.logos img { height: clamp(56px, 8vh, 110px); width: auto; }

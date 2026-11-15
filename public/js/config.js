@@ -2,7 +2,6 @@
 export const CONFIG = {
   eventName: "Photobox SMK Mamba'ul Ulum",      // nama booth / acara
   location: 'Mojokerto, Indonesia',
-  logos: ['/img/logo-yayasan.png', '/img/logo-smk.png'], // tampil di template, kiosk & halaman hasil (kosongkan [] bila tidak perlu)
   tagline: "Photobox SMK Mamba'ul Ulum Mojokerto",
   countdownSec: 3,          // hitung mundur per foto
   pauseBetweenShotsMs: 1200,

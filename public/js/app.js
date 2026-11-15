@@ -49,7 +49,6 @@ function marquee(el) {
   el.textContent = t.repeat(6);
 }
 $('#w-location').textContent = CONFIG.location;
-$('#w-logos').innerHTML = (CONFIG.logos || []).map(src => `<img src="${src}" alt="">`).join('');
 marquee($('#w-marquee')); marquee($('#r-marquee'));
 $('#btn-start').addEventListener('click', () => { go('s-template'); ensureCamera(); });
 
@@ -319,7 +318,7 @@ $('#btn-restart').addEventListener('click', restart);
 // --------------------------------------------------------------------
 (async function init() {
   await loadFonts();
-  await Promise.all([preloadOverlays(), preloadLogos(CONFIG.logos)]);
+  await Promise.all([preloadOverlays(), preloadLogos()]);
   buildTemplateGrid();
   buildFilterRow();
   selectFilter(FILTERS.find(f => f.id === state.tpl.defaultFilter) || FILTERS[0]);
