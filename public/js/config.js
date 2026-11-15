@@ -11,7 +11,8 @@ export const CONFIG = {
   retentionDays: 7,         // info masa simpan di halaman hasil (atur juga RETENTION_DAYS di Vercel)
   apiBase: '',              // kosongkan bila API satu domain (Vercel)
   kioskKey: '',             // isi sama dengan env KIOSK_KEY di Vercel (opsional)
-  gifWidth: 480,
+  gifWidth: 600,            // lebar GIF (template utuh, tinggi 1,5x)
+  videoScale: 0.5,          // video live template 600x900
   videoBitrate: 1_200_000,  // jaga video < 4 MB (batas upload fungsi Vercel 4,5 MB)
   maxVideoSec: 25,
 };

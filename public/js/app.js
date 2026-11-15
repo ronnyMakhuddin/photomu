@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { TEMPLATES, FILTERS, renderTemplate, placeholderPhotos, loadFonts, preloadOverlays, preloadLogos, drawCover, formatDateID } from './templates.js';
+import { TEMPLATES, FILTERS, renderTemplate, placeholderPhotos, loadFonts, preloadOverlays, preloadLogos, formatDateID } from './templates.js';
 import { GIFEncoder, quantize, applyPalette } from '../vendor/gifenc.esm.js';
 import { apiStatus, saveCloud, saveLocal } from './storage.js';
 
@@ -124,19 +124,25 @@ function pickMime() {
   const opts = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
   return opts.find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || '';
 }
+// Video langsung DI DALAM template: slot yang sudah difoto menampilkan hasilnya,
+// slot berikutnya menampilkan kamera langsung (berfilter & dicerminkan).
 function startLiveRecording(video) {
   state.videoBlob = null;
   if (!window.MediaRecorder || !HTMLCanvasElement.prototype.captureStream) return;
-  const vw = video.videoWidth || 1280, vh = video.videoHeight || 720;
-  const scale = Math.min(1, 960 / vw);
-  const c = document.createElement('canvas'); c.width = Math.round(vw * scale); c.height = Math.round(vh * scale);
-  const ctx = c.getContext('2d');
+  const live = document.createElement('canvas');
+  const vw = video.videoWidth || 1280, vh = video.videoHeight || 720, ls = Math.min(1, 640 / vw);
+  live.width = Math.round(vw * ls); live.height = Math.round(vh * ls);
+  const lctx = live.getContext('2d');
+  const c = document.createElement('canvas');
+  const opt = renderOpts(), tpl = state.tpl;
   let running = true;
   const draw = () => {
     if (!running) return;
-    ctx.save(); ctx.filter = state.filter.css;
-    if (CONFIG.mirror) { ctx.translate(c.width, 0); ctx.scale(-1, 1); }
-    ctx.drawImage(video, 0, 0, c.width, c.height); ctx.restore();
+    lctx.save(); lctx.filter = state.filter.css;
+    if (CONFIG.mirror) { lctx.translate(live.width, 0); lctx.scale(-1, 1); }
+    lctx.drawImage(video, 0, 0, live.width, live.height); lctx.restore();
+    const photos = Array.from({ length: tpl.slots }, (_, i) => state.shots[i] || live);
+    renderTemplate(c, tpl, photos, opt, CONFIG.videoScale);
     requestAnimationFrame(draw);
   };
   draw();
@@ -214,21 +220,19 @@ $('#btn-finish').addEventListener('click', () => { clearInterval(state.reviewTim
 // --------------------------------------------------------------------
 //  GIF dari foto-foto sesi (bolak-balik / boomerang)
 // --------------------------------------------------------------------
+// GIF DI DALAM template: tiap frame foto-foto bergeser antar slot.
 function makeGif(shots) {
-  const w = CONFIG.gifWidth, h = Math.round(w * 3 / 4), barH = 34;
-  const c = document.createElement('canvas'); c.width = w; c.height = h + barH;
-  const ctx = c.getContext('2d', { willReadFrequently: true });
-  const order = shots.length > 2 ? [...shots.keys(), ...[...shots.keys()].slice(1, -1).reverse()] : [...shots.keys()];
+  const c = document.createElement('canvas');
+  const opt = renderOpts(), n = shots.length;
   const gif = GIFEncoder();
-  order.forEach(i => {
-    ctx.fillStyle = '#1B2440'; ctx.fillRect(0, 0, c.width, c.height);
-    drawCover(ctx, shots[i], 0, 0, w, h);
-    ctx.fillStyle = '#fff'; ctx.font = '500 16px Jost, sans-serif'; ctx.textAlign = 'center';
-    ctx.fillText(`${CONFIG.eventName}  •  ${formatDateID()}`.toUpperCase(), w / 2, h + 23);
+  for (let k = 0; k < n; k++) {
+    const photos = shots.map((_, i) => shots[(i + k) % n]);
+    renderTemplate(c, state.tpl, photos, opt, CONFIG.gifWidth / 1200);
+    const ctx = c.getContext('2d', { willReadFrequently: true });
     const { data } = ctx.getImageData(0, 0, c.width, c.height);
     const palette = quantize(data, 256);
-    gif.writeFrame(applyPalette(data, palette), c.width, c.height, { palette, delay: 450 });
-  });
+    gif.writeFrame(applyPalette(data, palette), c.width, c.height, { palette, delay: k === 0 ? 1200 : 800 });
+  }
   gif.finish();
   return new Blob([gif.bytes()], { type: 'image/gif' });
 }

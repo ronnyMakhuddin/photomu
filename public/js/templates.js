@@ -474,10 +474,12 @@ export function preloadOverlays() {
 const RENDERERS = { newspaper: renderNewspaper, arch: renderArch, hero: renderHero, strip: renderStrip, overlay: renderOverlay };
 
 /** Gambar template ke canvas. photos = array canvas/gambar sudah difilter. */
-export function renderTemplate(canvas, tpl, photos, opt) {
-  canvas.width = PRINT_W; canvas.height = PRINT_H;
-  const ctx = canvas.getContext('2d');
+export function renderTemplate(canvas, tpl, photos, opt, scale = 1) {
+  const w = Math.round(PRINT_W * scale / 2) * 2, h = Math.round(PRINT_H * scale / 2) * 2; // genap (syarat encoder video)
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext('2d', { willReadFrequently: scale < 1 });
   ctx.save();
+  ctx.setTransform(w / PRINT_W, 0, 0, h / PRINT_H, 0, 0);
   RENDERERS[tpl.layout](ctx, tpl, photos, opt);
   ctx.restore();
   return canvas;
