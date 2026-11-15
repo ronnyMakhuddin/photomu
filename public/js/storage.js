@@ -5,13 +5,14 @@ import { CONFIG } from './config.js';
 const api = (p) => (CONFIG.apiBase || '') + p;
 const headers = (extra = {}) => (CONFIG.kioskKey ? { 'x-kiosk-key': CONFIG.kioskKey, ...extra } : extra);
 
-export async function apiAvailable() {
+/** 'ok' = server siap, 'unconfigured' = API ada tapi Neon/Blob belum terhubung, 'offline' = tanpa server (mode demo) */
+export async function apiStatus() {
   try {
     const r = await fetch(api('/api/health'), { cache: 'no-store' });
-    if (!r.ok) return false;
+    if (!r.ok) return 'offline';
     const j = await r.json();
-    return j.ok === true;
-  } catch { return false; }
+    return j.ok === true ? 'ok' : 'unconfigured';
+  } catch { return 'offline'; }
 }
 
 async function uploadFile(id, kind, blob) {

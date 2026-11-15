@@ -1,4 +1,6 @@
+import { DB_URL, BLOB_TOKEN } from '../lib/db.js';
+
 export function GET() {
-  const ok = Boolean(process.env.DATABASE_URL && process.env.BLOB_READ_WRITE_TOKEN);
-  return Response.json({ ok, db: Boolean(process.env.DATABASE_URL), blob: Boolean(process.env.BLOB_READ_WRITE_TOKEN) });
+  const db = Boolean(DB_URL), blob = Boolean(BLOB_TOKEN);
+  return Response.json({ ok: db && blob, db, blob }, { headers: { 'cache-control': 'no-store' } });
 }

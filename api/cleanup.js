@@ -1,5 +1,5 @@
 import { del } from '@vercel/blob';
-import { sql, ensureSchema, json } from '../lib/db.js';
+import { sql, ensureSchema, json, BLOB_TOKEN } from '../lib/db.js';
 
 // Dipanggil Vercel Cron tiap hari: hapus file & data yang sudah kedaluwarsa.
 export async function GET(request) {
@@ -8,7 +8,7 @@ export async function GET(request) {
   await ensureSchema();
   const rows = await sql`SELECT id, photo_url, gif_url, video_url FROM sessions WHERE expires_at < now() LIMIT 500`;
   const urls = rows.flatMap(r => [r.photo_url, r.gif_url, r.video_url]).filter(Boolean);
-  if (urls.length) await del(urls);
+  if (urls.length) await del(urls, { token: BLOB_TOKEN || undefined });
   if (rows.length) await sql`DELETE FROM sessions WHERE id = ANY(${rows.map(r => r.id)}::uuid[])`;
   return json({ deleted: rows.length });
 }

@@ -1,7 +1,7 @@
 import { CONFIG } from './config.js';
 import { TEMPLATES, FILTERS, renderTemplate, placeholderPhotos, loadFonts, preloadOverlays, preloadLogos, drawCover, formatDateID } from './templates.js';
 import { GIFEncoder, quantize, applyPalette } from '../vendor/gifenc.esm.js';
-import { apiAvailable, saveCloud, saveLocal } from './storage.js';
+import { apiStatus, saveCloud, saveLocal } from './storage.js';
 
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => [...document.querySelectorAll(s)];
@@ -272,8 +272,9 @@ async function finish() {
   const meta = { template: state.tpl.id, filter: state.filter.id, event_name: CONFIG.eventName };
   let url;
   try {
-    if (state.cloud === null) state.cloud = await apiAvailable();
-    if (state.cloud) {
+    state.cloud = await apiStatus();
+    if (state.cloud === 'unconfigured') throw new Error('Server belum siap: database Neon / Vercel Blob belum terhubung di Vercel.');
+    if (state.cloud === 'ok') {
       await saveCloud(id, meta, { photo, gif, video });
       url = `${location.origin}/picture/${id}`;
     } else {
@@ -281,7 +282,7 @@ async function finish() {
       url = `${location.origin}/hasil.html?id=${id}&local=1`;
     }
     drawQR(url);
-    $('#qr-note').textContent = state.cloud ? url : 'Mode demo (tanpa server): hasil hanya tersimpan di perangkat ini.';
+    $('#qr-note').textContent = state.cloud === 'ok' ? url : 'Mode demo (tanpa server): hasil hanya tersimpan di perangkat ini.';
   } catch (e) {
     console.error(e);
     $('#qr-box').innerHTML = '<p style="padding:12px">Gagal mengunggah. Periksa koneksi internet.</p>';
@@ -322,6 +323,5 @@ $('#btn-restart').addEventListener('click', restart);
   buildTemplateGrid();
   buildFilterRow();
   selectFilter(FILTERS.find(f => f.id === state.tpl.defaultFilter) || FILTERS[0]);
-  apiAvailable().then(ok => { state.cloud = ok; });
   window.__pb = state; // untuk debug
 })();
