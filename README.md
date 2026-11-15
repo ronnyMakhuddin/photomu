@@ -17,7 +17,7 @@ Aplikasi kiosk photobooth: kamera langsung → pilih template → pilih filter �
 | Kiosk & halaman hasil | HTML/CSS/JS murni di `public/` (tanpa build) |
 | API | Vercel Functions `api/*.js` (Node 20+) |
 | Database | **Neon Postgres** – tabel `sessions` (dibuat otomatis) |
-| File foto/GIF/video | **Vercel Blob** (Neon tidak cocok untuk file besar) |
+| File foto/GIF/video | **Neon Object Storage** (bucket `photomu`, S3) — atau Vercel Blob sebagai alternatif |
 | Pembersihan | Vercel Cron harian `/api/cleanup` menghapus data > `RETENTION_DAYS` |
 
 Endpoint: `GET /api/health`, `POST /api/upload?id&kind=photo|gif|video`, `POST/GET /api/session`, `GET /api/cleanup`.

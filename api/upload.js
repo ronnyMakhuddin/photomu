@@ -1,5 +1,5 @@
-import { put } from '@vercel/blob';
-import { UUID_RE, json, kioskAllowed, BLOB_TOKEN } from '../lib/db.js';
+import { UUID_RE, json, kioskAllowed } from '../lib/db.js';
+import { putFile } from '../lib/storage.js';
 
 const KINDS = {
   photo: { types: ['image/jpeg'], ext: () => 'jpg' },
@@ -23,8 +23,6 @@ export async function POST(request) {
   if (!buf.length) return json({ error: 'file kosong' }, 400);
   if (buf.length > MAX_BYTES) return json({ error: 'file terlalu besar' }, 413);
 
-  const blob = await put(`sessions/${id}/${kind}.${spec.ext(type)}`, buf, {
-    access: 'public', contentType: type, addRandomSuffix: false, allowOverwrite: true, token: BLOB_TOKEN || undefined,
-  });
-  return json({ url: blob.url });
+  const fileUrl = await putFile(`sessions/${id}/${kind}.${spec.ext(type)}`, buf, type);
+  return json({ url: fileUrl });
 }

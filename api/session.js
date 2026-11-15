@@ -1,7 +1,7 @@
 import { sql, ensureSchema, RETENTION_DAYS, UUID_RE, json, kioskAllowed } from '../lib/db.js';
+import { isOwnUrl } from '../lib/storage.js';
 
-const BLOB_HOST = /^https:\/\/[a-z0-9-]+\.public\.blob\.vercel-storage\.com\//i;
-const clean = (v) => (typeof v === 'string' && BLOB_HOST.test(v) ? v : null);
+const clean = (v) => (isOwnUrl(v) ? v : null);
 const short = (v) => (typeof v === 'string' ? v.slice(0, 120) : null);
 
 // POST /api/session  -> catat sesi foto

@@ -1,6 +1,7 @@
-import { DB_URL, BLOB_TOKEN } from '../lib/db.js';
+import { DB_URL } from '../lib/db.js';
+import { STORAGE } from '../lib/storage.js';
 
 export function GET() {
-  const db = Boolean(DB_URL), blob = Boolean(BLOB_TOKEN);
-  return Response.json({ ok: db && blob, db, blob }, { headers: { 'cache-control': 'no-store' } });
+  const db = Boolean(DB_URL), storage = STORAGE || false;
+  return Response.json({ ok: db && Boolean(storage), db, storage }, { headers: { 'cache-control': 'no-store' } });
 }
