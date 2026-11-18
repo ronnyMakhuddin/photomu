@@ -50,7 +50,8 @@ function marquee(el) {
 }
 $('#w-location').textContent = CONFIG.location;
 marquee($('#w-marquee')); marquee($('#r-marquee'));
-$('#btn-start').addEventListener('click', () => { go('s-template'); ensureCamera(); });
+// Sentuh di mana saja pada layar awal untuk mulai (tidak bergantung pada posisi tombol)
+$('#s-welcome').addEventListener('click', () => { go('s-template'); ensureCamera(); });
 
 // --------------------------------------------------------------------
 //  Template
@@ -254,7 +255,8 @@ async function finish() {
   if (state.busy) return; state.busy = true;
   $('#busy-text').textContent = 'Menyusun hasil foto…'; $('#busy').hidden = false;
   await sleep(50);
-  const id = crypto.randomUUID();
+  const id = (crypto.randomUUID && crypto.randomUUID()) ||
+    '10000000-1000-4000-8000-100000000000'.replace(/[018]/g, c => (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16));
   const photo = await toBlob(state.composite, 'image/jpeg', 0.92);
   $('#busy-text').textContent = 'Membuat GIF…'; await sleep(30);
   let gif = null; try { gif = makeGif(state.shots); } catch (e) { console.warn('GIF gagal', e); }
